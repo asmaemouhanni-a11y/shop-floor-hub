@@ -1,0 +1,170 @@
+import { useState } from 'react';
+import { Shield, CheckCircle, DollarSign, Truck, TrendingUp, Users, ChevronDown, AlertTriangle, Clock, Plus } from 'lucide-react';
+import { SfmCategory, Kpi, Action } from '@/types/sfm';
+import { useKpis, useCategoryStats, useActions } from '@/hooks/useSfmData';
+import { useAuth } from '@/hooks/useAuth';
+import { KpiChart } from './KpiChart';
+import { ActionCard } from './ActionCard';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  'shield': Shield,
+  'check-circle': CheckCircle,
+  'dollar-sign': DollarSign,
+  'truck': Truck,
+  'trending-up': TrendingUp,
+  'users': Users,
+};
+
+interface SfmColumnProps {
+  category: SfmCategory;
+  onAddAction?: () => void;
+  onAddKpi?: () => void;
+}
+
+export function SfmColumn({ category, onAddAction, onAddKpi }: SfmColumnProps) {
+  const { hasPermission } = useAuth();
+  const { data: kpis } = useKpis(category.id);
+  const { data: stats } = useCategoryStats(category.id);
+  const { data: actions } = useActions(category.id);
+  
+  const [selectedKpiId, setSelectedKpiId] = useState<string | null>(null);
+  
+  const Icon = iconMap[category.icon || 'trending-up'] || TrendingUp;
+  const selectedKpi = kpis?.find(k => k.id === selectedKpiId) || kpis?.[0];
+
+  const openActions = actions?.filter(a => a.status !== 'completed') || [];
+  const overdueActions = actions?.filter(a => 
+    a.status === 'overdue' || 
+    (a.status !== 'completed' && new Date(a.due_date) < new Date())
+  ) || [];
+
+  const canManageKpis = hasPermission(['admin', 'manager']);
+  const canManageActions = hasPermission(['admin', 'manager', 'team_leader']);
+
+  return (
+    <div 
+      className="sfm-column flex flex-col h-full min-w-[280px]"
+      data-code={category.code}
+      style={{ '--category-color': category.color } as React.CSSProperties}
+    >
+      {/* Header */}
+      <div 
+        className="p-4 border-b border-border/30"
+        style={{ borderBottomColor: `${category.color}30` }}
+      >
+        <div className="flex items-center gap-3 mb-3">
+          <div 
+            className="p-2 rounded-lg"
+            style={{ backgroundColor: `${category.color}20` }}
+          >
+            <Icon className="h-5 w-5" style={{ color: category.color }} />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-foreground">{category.name}</h2>
+            <span 
+              className="text-xs font-mono font-semibold"
+              style={{ color: category.color }}
+            >
+              {category.code}
+            </span>
+          </div>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="flex items-center gap-2">
+          {stats?.overdueActions && stats.overdueActions > 0 ? (
+            <Badge variant="destructive" className="text-xs gap-1">
+              <AlertTriangle className="h-3 w-3" />
+              {stats.overdueActions} en retard
+            </Badge>
+          ) : null}
+          {stats?.openActions ? (
+            <Badge variant="secondary" className="text-xs gap-1">
+              <Clock className="h-3 w-3" />
+              {stats.openActions} actions
+            </Badge>
+          ) : null}
+        </div>
+      </div>
+
+      {/* KPI Selector */}
+      <div className="p-4 border-b border-border/30">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            Indicateur KPI
+          </span>
+          {canManageKpis && (
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onAddKpi}>
+              <Plus className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
+        {kpis && kpis.length > 0 ? (
+          <Select 
+            value={selectedKpi?.id || ''} 
+            onValueChange={(value) => setSelectedKpiId(value)}
+          >
+            <SelectTrigger className="w-full bg-background/50">
+              <SelectValue placeholder="Sélectionner un KPI" />
+            </SelectTrigger>
+            <SelectContent>
+              {kpis.map((kpi) => (
+                <SelectItem key={kpi.id} value={kpi.id}>
+                  {kpi.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ) : (
+          <div className="text-sm text-muted-foreground text-center py-4">
+            Aucun KPI configuré
+          </div>
+        )}
+      </div>
+
+      {/* KPI Chart */}
+      {selectedKpi && (
+        <div className="p-4 border-b border-border/30">
+          <KpiChart kpi={selectedKpi} categoryColor={category.color} />
+        </div>
+      )}
+
+      {/* Actions Section */}
+      <div className="flex-1 flex flex-col min-h-0">
+        <div className="p-4 pb-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              Plan d'actions
+            </span>
+            <Badge variant="outline" className="text-xs">
+              {openActions.length}
+            </Badge>
+          </div>
+          {canManageActions && (
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onAddAction}>
+              <Plus className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
+        
+        <ScrollArea className="flex-1 px-4 pb-4">
+          <div className="space-y-2">
+            {openActions.length > 0 ? (
+              openActions.slice(0, 5).map((action) => (
+                <ActionCard key={action.id} action={action} compact />
+              ))
+            ) : (
+              <div className="text-center py-8 text-sm text-muted-foreground">
+                Aucune action en cours
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+      </div>
+    </div>
+  );
+}
