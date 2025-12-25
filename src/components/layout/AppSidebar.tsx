@@ -35,6 +35,7 @@ const navItems: NavItem[] = [
 ];
 
 const adminItems: NavItem[] = [
+  { title: 'Catégories & KPIs', href: '/admin', icon: Settings, requiredRole: ['admin'] },
   { title: 'Utilisateurs', href: '/users', icon: Users, requiredRole: ['admin'] },
   { title: 'Paramètres', href: '/settings', icon: Settings, requiredRole: ['admin', 'manager'] },
 ];
