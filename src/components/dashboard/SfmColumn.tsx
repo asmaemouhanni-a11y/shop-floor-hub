@@ -52,7 +52,7 @@ export function SfmColumn({ category, onAddAction, onAddKpi }: SfmColumnProps) {
 
   return (
     <div 
-      className="sfm-column flex flex-col h-full min-w-[280px]"
+      className="sfm-column flex flex-col h-full min-w-[320px] w-[320px]"
       data-code={category.code}
       style={{ '--category-color': category.color } as React.CSSProperties}
     >

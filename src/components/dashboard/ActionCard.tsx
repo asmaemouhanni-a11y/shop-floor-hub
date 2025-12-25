@@ -70,7 +70,7 @@ export function ActionCard({ action, compact = false, onEdit }: ActionCardProps)
     return (
       <div 
         className={cn(
-          "industrial-card p-3 transition-all duration-200 group",
+          "industrial-card p-4 transition-all duration-200 group",
           isOverdue && "border-destructive/50",
           isDueToday && !isOverdue && "border-status-orange/50"
         )}
@@ -108,9 +108,9 @@ export function ActionCard({ action, compact = false, onEdit }: ActionCardProps)
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="h-7 w-7 opacity-70 group-hover:opacity-100 transition-opacity"
                   >
-                    <MoreHorizontal className="h-3.5 w-3.5" />
+                    <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
