@@ -107,7 +107,7 @@ export function CategoryDialog({ open, onOpenChange, category }: CategoryDialogP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{isEditing ? 'Modifier la catégorie' : 'Nouvelle catégorie'}</DialogTitle>
           <DialogDescription>
