@@ -73,33 +73,52 @@
   }
 
   .dark {
-    --background: 220 20% 10%;
-    --foreground: 210 20% 95%;
-    --card: 220 18% 13%;
-    --card-foreground: 210 20% 95%;
-    --popover: 220 18% 13%;
-    --popover-foreground: 210 20% 95%;
-    --primary: 217 91% 55%;
+    --background: 222 20% 8%;
+    --foreground: 210 20% 98%;
+    --card: 222 18% 12%;
+    --card-foreground: 210 20% 98%;
+    --popover: 222 18% 12%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 15% 20%;
-    --secondary-foreground: 210 20% 90%;
-    --muted: 220 15% 18%;
-    --muted-foreground: 215 15% 55%;
-    --accent: 220 15% 22%;
-    --accent-foreground: 210 20% 95%;
-    --destructive: 0 72% 51%;
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 210 20% 95%;
+    --muted: 220 15% 15%;
+    --muted-foreground: 215 15% 65%;
+    --accent: 220 15% 20%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 22%;
-    --input: 220 15% 18%;
-    --ring: 217 91% 55%;
-    --sidebar-background: 220 18% 8%;
-    --sidebar-foreground: 210 20% 90%;
-    --sidebar-primary: 217 91% 55%;
+    --border: 220 15% 20%;
+    --input: 220 15% 15%;
+    --ring: 217 91% 60%;
+
+    /* Dark mode SFM Category Colors - more vibrant */
+    --sfm-safety: 0 84% 60%;
+    --sfm-quality: 217 91% 65%;
+    --sfm-cost: 142 71% 50%;
+    --sfm-delivery: 258 90% 70%;
+    --sfm-performance: 38 92% 55%;
+    --sfm-human: 187 92% 48%;
+
+    /* Dark mode Status Colors - brighter */
+    --status-green: 142 71% 50%;
+    --status-orange: 25 95% 55%;
+    --status-red: 0 84% 60%;
+
+    /* Dark mode gradients */
+    --gradient-light: linear-gradient(180deg, hsl(222 20% 8%) 0%, hsl(222 18% 10%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(222 18% 12%) 0%, hsl(222 15% 10%) 100%);
+    --gradient-glow: radial-gradient(ellipse at top, hsl(217 91% 60% / 0.12) 0%, transparent 50%);
+
+    --sidebar-background: 222 18% 6%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 15% 15%;
-    --sidebar-accent-foreground: 210 20% 90%;
-    --sidebar-border: 220 15% 12%;
-    --sidebar-ring: 217 91% 55%;
+    --sidebar-accent: 220 15% 12%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 220 15% 10%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -115,8 +134,15 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
-    background: var(--gradient-light);
     min-height: 100vh;
+  }
+
+  :root body {
+    background: var(--gradient-light);
+  }
+
+  .dark body {
+    background: hsl(var(--background));
   }
 
   /* Custom scrollbar */
