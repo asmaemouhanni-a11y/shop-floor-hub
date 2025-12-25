@@ -67,6 +67,30 @@ export type Database = {
           },
         ]
       }
+      app_settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string | null
+          updated_by: string | null
+          value: string | null
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value?: string | null
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value?: string | null
+        }
+        Relationships: []
+      }
       kpi_values: {
         Row: {
           created_at: string
@@ -356,6 +380,39 @@ export type Database = {
         Update: {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          action_reminders: boolean | null
+          created_at: string | null
+          email_alerts: boolean | null
+          id: string
+          kpi_alerts: boolean | null
+          problem_escalation: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          action_reminders?: boolean | null
+          created_at?: string | null
+          email_alerts?: boolean | null
+          id?: string
+          kpi_alerts?: boolean | null
+          problem_escalation?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          action_reminders?: boolean | null
+          created_at?: string | null
+          email_alerts?: boolean | null
+          id?: string
+          kpi_alerts?: boolean | null
+          problem_escalation?: boolean | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
