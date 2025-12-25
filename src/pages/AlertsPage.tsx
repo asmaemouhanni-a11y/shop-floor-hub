@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { 
   Bell, 
@@ -310,28 +311,40 @@ export default function AlertsPage() {
                 </div>
                 
                 {hasPermission(['admin', 'manager']) && (
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {showMarkRead && !alert.is_read && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleMarkRead(alert.id)}
-                        disabled={markRead.isPending}
-                      >
-                        <CheckCircle2 className="h-4 w-4 mr-1" />
-                        <span className="hidden sm:inline">Marquer lu</span>
-                      </Button>
-                    )}
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleDelete(alert.id)}
-                      disabled={deleteAlert.isPending}
-                      className="text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <TooltipProvider>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {showMarkRead && !alert.is_read && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleMarkRead(alert.id)}
+                              disabled={markRead.isPending}
+                            >
+                              <CheckCircle2 className="h-4 w-4 mr-1" />
+                              <span className="hidden sm:inline">Marquer lu</span>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Marquer comme lu</TooltipContent>
+                        </Tooltip>
+                      )}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleDelete(alert.id)}
+                            disabled={deleteAlert.isPending}
+                            className="text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Supprimer l'alerte</TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </TooltipProvider>
                 )}
               </div>
             </div>
