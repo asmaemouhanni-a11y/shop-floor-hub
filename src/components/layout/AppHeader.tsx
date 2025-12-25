@@ -58,8 +58,8 @@ export function AppHeader({ title, subtitle }: AppHeaderProps) {
         </div>
 
         {/* Current Date */}
-        <div className="hidden md:flex flex-col items-center">
-          <span className="text-sm font-medium text-foreground">
+        <div className="hidden lg:flex flex-col items-center text-right flex-shrink-0">
+          <span className="text-sm font-medium text-foreground whitespace-nowrap">
             {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
           </span>
           <span className="text-xs text-muted-foreground">
