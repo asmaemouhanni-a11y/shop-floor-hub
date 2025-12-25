@@ -173,8 +173,8 @@ export default function DashboardPage() {
         )}
       </div>
 
-      <div className="overflow-x-auto pb-4 -mx-4 px-4">
-        <div className="flex gap-4" style={{ minWidth: 'min-content' }}>
+      <div className="overflow-x-auto pb-4 -mx-2 px-2 sm:-mx-4 sm:px-4">
+        <div className="flex gap-3 sm:gap-4" style={{ minWidth: 'min-content' }}>
           {categories?.map((category) => (
             <SfmColumn 
               key={category.id}
