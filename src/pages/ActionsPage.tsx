@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CreateActionDialog } from '@/components/dashboard/CreateActionDialog';
@@ -122,34 +123,51 @@ export default function ActionsPage() {
           </div>
           
           {canManage && (
-            <div className="flex flex-col gap-2">
-              {action.status === 'todo' && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleUpdateStatus(action.id, 'in_progress')}
-                >
-                  <Play className="h-4 w-4" />
-                </Button>
-              )}
-              {(action.status === 'in_progress' || activeTab === 'overdue') && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleUpdateStatus(action.id, 'completed')}
-                >
-                  <CheckCircle2 className="h-4 w-4" />
-                </Button>
-              )}
-              <Button
-                size="sm"
-                variant="outline"
-                className="text-destructive hover:text-destructive"
-                onClick={() => handleDelete(action.id)}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
+            <TooltipProvider>
+              <div className="flex flex-col gap-2">
+                {action.status === 'todo' && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUpdateStatus(action.id, 'in_progress')}
+                      >
+                        <Play className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Marquer en cours</TooltipContent>
+                  </Tooltip>
+                )}
+                {(action.status === 'in_progress' || activeTab === 'overdue') && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUpdateStatus(action.id, 'completed')}
+                      >
+                        <CheckCircle2 className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Marquer terminée</TooltipContent>
+                  </Tooltip>
+                )}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-destructive hover:text-destructive"
+                      onClick={() => handleDelete(action.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Supprimer</TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
           )}
         </div>
       </div>

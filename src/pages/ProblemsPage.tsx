@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { CreateProblemDialog } from '@/components/dashboard/CreateProblemDialog';
 import { 
   AlertTriangle, 
@@ -121,26 +122,38 @@ export default function ProblemsPage() {
           </div>
           
           {canManage && (
-            <div className="flex flex-col gap-2">
-              {problem.status === 'open' && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleUpdateStatus(problem.id, 'in_progress')}
-                >
-                  <Play className="h-4 w-4" />
-                </Button>
-              )}
-              {problem.status === 'in_progress' && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleUpdateStatus(problem.id, 'resolved')}
-                >
-                  <CheckCircle2 className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
+            <TooltipProvider>
+              <div className="flex flex-col gap-2">
+                {problem.status === 'open' && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUpdateStatus(problem.id, 'in_progress')}
+                      >
+                        <Play className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Marquer en cours</TooltipContent>
+                  </Tooltip>
+                )}
+                {problem.status === 'in_progress' && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUpdateStatus(problem.id, 'resolved')}
+                      >
+                        <CheckCircle2 className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Marquer résolu</TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
+            </TooltipProvider>
           )}
         </div>
       </div>
