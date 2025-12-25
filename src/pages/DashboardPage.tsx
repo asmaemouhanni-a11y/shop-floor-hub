@@ -173,20 +173,18 @@ export default function DashboardPage() {
         )}
       </div>
 
-      <div className="overflow-x-auto pb-4 -mx-2 px-2 sm:-mx-4 sm:px-4">
-        <div className="flex gap-3 sm:gap-4" style={{ minWidth: 'min-content' }}>
-          {categories?.map((category) => (
-            <SfmColumn 
-              key={category.id}
-              category={category} 
-              onAddAction={() => handleAddAction(category.id)}
-              onAddKpi={() => handleAddKpi(category.id)}
-              onEditCategory={handleEditCategory}
-              onDeleteCategory={handleDeleteCategory}
-              onEditKpi={handleEditKpi}
-            />
-          ))}
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4">
+        {categories?.map((category) => (
+          <SfmColumn 
+            key={category.id}
+            category={category} 
+            onAddAction={() => handleAddAction(category.id)}
+            onAddKpi={() => handleAddKpi(category.id)}
+            onEditCategory={handleEditCategory}
+            onDeleteCategory={handleDeleteCategory}
+            onEditKpi={handleEditKpi}
+          />
+        ))}
       </div>
 
       <CreateActionDialog
