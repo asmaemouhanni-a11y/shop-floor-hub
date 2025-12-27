@@ -503,6 +503,39 @@ export function useProfiles() {
   });
 }
 
+// Profiles for responsible selection (excludes admin and operator roles)
+export function useResponsibleProfiles() {
+  return useQuery({
+    queryKey: ['responsible_profiles'],
+    queryFn: async () => {
+      // Get all profiles
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('status', 'approved')
+        .order('full_name');
+      if (profilesError) throw profilesError;
+
+      // Get user roles
+      const { data: roles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+      if (rolesError) throw rolesError;
+
+      // Create a map of user_id to role
+      const roleMap = new Map(roles?.map(r => [r.user_id, r.role]) || []);
+
+      // Filter out profiles with admin or operator roles
+      const filteredProfiles = profiles?.filter(profile => {
+        const role = roleMap.get(profile.user_id);
+        return role !== 'admin' && role !== 'operator';
+      }) || [];
+
+      return filteredProfiles;
+    },
+  });
+}
+
 // Category stats
 export function useCategoryStats(categoryId: string) {
   return useQuery({
