@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { usePushNotifications, PushNotificationSettings } from '@/hooks/usePushNotifications';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -19,7 +20,10 @@ import {
   Building2, 
   Save,
   Loader2,
-  KeyRound
+  KeyRound,
+  BellRing,
+  CheckCircle2,
+  XCircle
 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
 
@@ -39,6 +43,13 @@ interface AppSettings {
 export default function SettingsPage() {
   const { role, profile, user, hasPermission } = useAuth();
   const queryClient = useQueryClient();
+  const { 
+    isSupported: pushSupported, 
+    permission: pushPermission, 
+    settings: pushSettings, 
+    requestPermission, 
+    updateSettings: updatePushSettings 
+  } = usePushNotifications();
 
   // Redirect non-authorized users
   if (!hasPermission(['admin', 'manager'])) {
@@ -295,6 +306,132 @@ export default function SettingsPage() {
                   )}
                   Enregistrer
                 </Button>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Push Notifications Settings */}
+        <Card className="bg-card/50 border-border/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BellRing className="h-5 w-5 text-primary" />
+              Notifications Push
+            </CardTitle>
+            <CardDescription>
+              Recevez des alertes même quand l'application est fermée
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {!pushSupported ? (
+              <div className="p-4 rounded-lg bg-muted/50 border border-border/50 text-center">
+                <XCircle className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                <p className="text-sm text-muted-foreground">
+                  Votre navigateur ne supporte pas les notifications push.
+                </p>
+              </div>
+            ) : pushPermission === 'denied' ? (
+              <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-center">
+                <XCircle className="h-8 w-8 text-destructive mx-auto mb-2" />
+                <p className="text-sm text-destructive">
+                  Les notifications sont bloquées. Veuillez les autoriser dans les paramètres de votre navigateur.
+                </p>
+              </div>
+            ) : pushPermission !== 'granted' ? (
+              <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 text-center">
+                <BellRing className="h-8 w-8 text-primary mx-auto mb-2" />
+                <p className="text-sm text-muted-foreground mb-3">
+                  Activez les notifications push pour recevoir des alertes en temps réel.
+                </p>
+                <Button onClick={requestPermission}>
+                  <Bell className="h-4 w-4 mr-2" />
+                  Autoriser les notifications
+                </Button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-[hsl(var(--status-green))]/10 border border-[hsl(var(--status-green))]/20">
+                  <CheckCircle2 className="h-5 w-5 text-[hsl(var(--status-green))]" />
+                  <span className="text-sm font-medium text-[hsl(var(--status-green))]">
+                    Notifications push activées
+                  </span>
+                </div>
+
+                <Separator />
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="pushEnabled">Activer les push</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Recevoir les notifications système
+                    </p>
+                  </div>
+                  <Switch
+                    id="pushEnabled"
+                    checked={pushSettings.push_enabled}
+                    onCheckedChange={(checked) => {
+                      updatePushSettings({ push_enabled: checked });
+                      toast.success(checked ? 'Notifications activées' : 'Notifications désactivées');
+                    }}
+                  />
+                </div>
+
+                <Separator />
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="pushKpi">Alertes KPI critiques</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Quand un KPI devient critique
+                    </p>
+                  </div>
+                  <Switch
+                    id="pushKpi"
+                    checked={pushSettings.push_kpi_alerts}
+                    disabled={!pushSettings.push_enabled}
+                    onCheckedChange={(checked) => 
+                      updatePushSettings({ push_kpi_alerts: checked })
+                    }
+                  />
+                </div>
+
+                <Separator />
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="pushActions">Actions en retard</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Quand une action dépasse son échéance
+                    </p>
+                  </div>
+                  <Switch
+                    id="pushActions"
+                    checked={pushSettings.push_action_reminders}
+                    disabled={!pushSettings.push_enabled}
+                    onCheckedChange={(checked) => 
+                      updatePushSettings({ push_action_reminders: checked })
+                    }
+                  />
+                </div>
+
+                <Separator />
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="pushProblems">Problèmes graves</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Quand un problème critique est signalé
+                    </p>
+                  </div>
+                  <Switch
+                    id="pushProblems"
+                    checked={pushSettings.push_problem_alerts}
+                    disabled={!pushSettings.push_enabled}
+                    onCheckedChange={(checked) => 
+                      updatePushSettings({ push_problem_alerts: checked })
+                    }
+                  />
+                </div>
               </>
             )}
           </CardContent>

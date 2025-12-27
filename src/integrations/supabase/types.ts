@@ -442,6 +442,10 @@ export type Database = {
           id: string
           kpi_alerts: boolean | null
           problem_escalation: boolean | null
+          push_action_reminders: boolean | null
+          push_enabled: boolean | null
+          push_kpi_alerts: boolean | null
+          push_problem_alerts: boolean | null
           updated_at: string | null
           user_id: string
         }
@@ -452,6 +456,10 @@ export type Database = {
           id?: string
           kpi_alerts?: boolean | null
           problem_escalation?: boolean | null
+          push_action_reminders?: boolean | null
+          push_enabled?: boolean | null
+          push_kpi_alerts?: boolean | null
+          push_problem_alerts?: boolean | null
           updated_at?: string | null
           user_id: string
         }
@@ -462,6 +470,10 @@ export type Database = {
           id?: string
           kpi_alerts?: boolean | null
           problem_escalation?: boolean | null
+          push_action_reminders?: boolean | null
+          push_enabled?: boolean | null
+          push_kpi_alerts?: boolean | null
+          push_problem_alerts?: boolean | null
           updated_at?: string | null
           user_id?: string
         }
