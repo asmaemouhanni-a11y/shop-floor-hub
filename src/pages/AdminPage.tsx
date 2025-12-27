@@ -52,15 +52,6 @@ export default function AdminPage() {
   const [selectedKpi, setSelectedKpi] = useState<Kpi | null>(null);
   const [deleteItem, setDeleteItem] = useState<{ type: 'category' | 'kpi'; id: string; name: string } | null>(null);
 
-  // Only managers can access this page (admin only manages users)
-  if (role === 'admin') {
-    return <Navigate to="/users" replace />;
-  }
-  
-  if (!hasPermission('manager')) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
   const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
@@ -84,6 +75,15 @@ export default function AdminPage() {
       return data;
     },
   });
+
+  // Only managers can access this page (admin only manages users)
+  if (role === 'admin') {
+    return <Navigate to="/users" replace />;
+  }
+  
+  if (!hasPermission('manager')) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleEditCategory = (category: SfmCategory) => {
     setSelectedCategory(category);

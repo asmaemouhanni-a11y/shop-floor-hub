@@ -27,11 +27,6 @@ export default function DashboardPage() {
   const { role } = useAuth();
   const { data: categories, isLoading: categoriesLoading } = useCategories();
   const { data: stats, isLoading: statsLoading } = useDashboardStats();
-
-  // Admin ne doit pas accéder au dashboard - rediriger vers la gestion utilisateurs
-  if (role === 'admin') {
-    return <Navigate to="/users" replace />;
-  }
   
   const [actionDialogOpen, setActionDialogOpen] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>();
@@ -48,6 +43,10 @@ export default function DashboardPage() {
   // Permissions - Only manager can manage categories and KPIs (admin manages only users)
   const canManageCategories = role === 'manager';
 
+  // Admin ne doit pas accéder au dashboard - rediriger vers la gestion utilisateurs
+  if (role === 'admin') {
+    return <Navigate to="/users" replace />;
+  }
   const handleAddCategory = () => {
     setSelectedCategory(null);
     setCategoryDialogOpen(true);

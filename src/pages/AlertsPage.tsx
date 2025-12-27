@@ -97,12 +97,12 @@ export default function AlertsPage() {
   const generateAlerts = useGenerateAlerts();
   const deleteAlert = useDeleteAlert();
 
+  const [activeTab, setActiveTab] = useState('unread');
+
   // Admin ne doit pas accéder aux alertes
   if (role === 'admin') {
     return <Navigate to="/users" replace />;
   }
-
-  const [activeTab, setActiveTab] = useState('unread');
 
   const unreadAlerts = alerts?.filter(a => !a.is_read) || [];
   const readAlerts = alerts?.filter(a => a.is_read) || [];
