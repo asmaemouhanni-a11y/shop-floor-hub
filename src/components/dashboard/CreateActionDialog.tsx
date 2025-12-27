@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/hooks/useAuth';
-import { useCreateAction, useCategories, useProfiles } from '@/hooks/useSfmData';
+import { useCreateAction, useCategories, useResponsibleProfiles } from '@/hooks/useSfmData';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -51,7 +51,7 @@ interface CreateActionDialogProps {
 export function CreateActionDialog({ open, onOpenChange, defaultCategoryId }: CreateActionDialogProps) {
   const { user } = useAuth();
   const { data: categories } = useCategories();
-  const { data: profiles } = useProfiles();
+  const { data: profiles } = useResponsibleProfiles();
   const createAction = useCreateAction();
 
   const form = useForm<ActionFormData>({
