@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SidebarProvider } from "@/contexts/SidebarContext";
 import { ThemeProvider } from "next-themes";
+import { PushNotificationPrompt } from "@/components/notifications/PushNotificationPrompt";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import DashboardPage from "./pages/DashboardPage";
@@ -31,6 +32,7 @@ const App = () => (
           <TooltipProvider>
             <Toaster />
             <Sonner />
+            <PushNotificationPrompt />
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />} />
