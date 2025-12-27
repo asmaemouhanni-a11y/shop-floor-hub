@@ -19,12 +19,9 @@ import {
   Building2, 
   Save,
   Loader2,
-  KeyRound,
-  Send,
-  CheckCircle2
+  KeyRound
 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
-import { sendNotification } from '@/lib/notifications';
 
 interface NotificationSettings {
   email_alerts: boolean;
@@ -286,37 +283,6 @@ export default function SettingsPage() {
                   />
                 </div>
 
-                <Separator />
-
-                <div className="space-y-3 pt-2">
-                  <p className="text-sm font-medium">Tester les notifications</p>
-                  <Button 
-                    variant="outline"
-                    onClick={async () => {
-                      if (!profile?.email) {
-                        toast.error('Email non disponible');
-                        return;
-                      }
-                      const result = await sendNotification({
-                        type: 'general',
-                        title: 'Test de notification',
-                        message: 'Ceci est un test de notification. Si vous recevez ce message, vos notifications fonctionnent correctement.',
-                        recipientEmail: profile.email,
-                        recipientName: profile.full_name,
-                      });
-                      if (result.success) {
-                        toast.success('Notification de test envoyée !');
-                      } else {
-                        toast.error(result.error || result.message || 'Erreur lors de l\'envoi');
-                      }
-                    }}
-                    className="w-full"
-                  >
-                    <Send className="h-4 w-4 mr-2" />
-                    Envoyer une notification de test
-                  </Button>
-                </div>
-
                 <Button 
                   onClick={handleSaveNotifications} 
                   className="w-full mt-4"
@@ -327,7 +293,7 @@ export default function SettingsPage() {
                   ) : (
                     <Save className="h-4 w-4 mr-2" />
                   )}
-                  Enregistrer les préférences
+                  Enregistrer
                 </Button>
               </>
             )}
